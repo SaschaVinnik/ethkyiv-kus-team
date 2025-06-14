@@ -1,9 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-// create model
 @Entity('disputes')
 export class DisputeModel {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -14,6 +13,31 @@ export class DisputeModel {
 
   @Column({ type: 'varchar', length: 255 })
   mediatorAddress: string;
+
+  @Column({ type: 'text' })
+  problemIPFS: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  resolutionIPFS: string | null;
+
+
+  @Column({ type: 'bigint' })
+  totalLockedAmount: string;
+
+  @Column({ type: 'int' })
+  status: number;
+
+  @Column({ type: 'boolean' })
+  paid1: boolean;
+
+  @Column({ type: 'boolean' })
+  paid2: boolean;
+
+  @Column({ type: 'boolean' })
+  confirmed1: boolean;
+
+  @Column({ type: 'boolean' })
+  confirmed2: boolean;
 
   @Column({ type: 'bigint' })
   createdAt: number;

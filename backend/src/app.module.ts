@@ -6,6 +6,8 @@ import { DisputeModel } from './disputes/models/dispute.model';
 import { ConfigModule } from '@nestjs/config';
 import { DisputesModule } from './disputes/disputes.module';
 
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,3 +30,5 @@ import { DisputesModule } from './disputes/disputes.module';
   providers: [],
 })
 export class AppModule {}
+
+

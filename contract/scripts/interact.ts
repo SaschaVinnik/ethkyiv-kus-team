@@ -41,8 +41,7 @@ async function main() {
   const parsedLog = iface.parseLog(log!);
   const disputeId = parsedLog!.args[0];
   console.log("🆕 Created dispute ID:", disputeId.toString());
-
-  // 2. Approve and Deposit
+    // 2. Approve and Deposit
   await (
     await usdc.connect(party1).approve(CONTRACT_ADDRESS, DEPOSIT_AMOUNT)
   ).wait();
