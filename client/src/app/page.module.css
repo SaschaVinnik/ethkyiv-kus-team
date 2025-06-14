@@ -1,0 +1,172 @@
+.main {
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+  background-color: #ffffff;
+}
+
+.hero {
+  position: relative;
+  height: 100vh;
+  background: url('/bg.svg') no-repeat center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary, .secondary {
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.primary {
+  background: linear-gradient(to right, #3b82f6, #6366f1);
+  color: white;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+}
+
+.secondary {
+  background: transparent;
+  border: 2px solid #3b82f6;
+  color: #3b82f6;
+}
+
+.secondary:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Steps */
+.steps {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.stepGrid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.step {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  max-width: 300px;
+  flex: 1;
+  min-width: 240px;
+  transition: transform 0.3s;
+}
+
+.step:hover {
+  transform: translateY(-6px);
+}
+
+.step h3 {
+  margin-top: 1rem;
+}
+
+.arrow {
+  font-size: 2rem;
+  color: #94a3b8;
+}
+
+/* Trust Section */
+.trust {
+  padding: 4rem 2rem;
+  background: #fff;
+  text-align: center;
+}
+
+.caseGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.case {
+  background: #f1f5f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 300px;
+  transition: all 0.3s;
+}
+
+.case:hover {
+  background: #e2e8f0;
+  transform: translateY(-4px);
+}
+
+/* Tech Section */
+.tech {
+  padding: 4rem 2rem;
+  background: #f9fafb;
+  text-align: center;
+}
+
+.techList {
+  list-style: none;
+  padding: 0;
+  max-width: 500px;
+  margin: 2rem auto 0 auto;
+  text-align: left;
+}
+
+.techList li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.1rem;
+}
