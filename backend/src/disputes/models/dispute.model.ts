@@ -1,25 +1,23 @@
-// create model
-export class DisputeModel {
-  id: string;
-  address1: string;
-  address2: string;
-  mediatorAddress: string;
-  createdAt: number;
-  updatedAt: number;
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-  constructor(
-    id: string,
-    address1: string,
-    address2: string,
-    mediatorAddress: string,
-    createdAt: number,
-    updatedAt: number,
-  ) {
-    this.id = id;
-    this.address1 = address1;
-    this.address2 = address2;
-    this.mediatorAddress = mediatorAddress;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
+// create model
+@Entity('disputes')
+export class DisputeModel {
+  @PrimaryGeneratedColumn()
+  id: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  address1: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  address2: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  mediatorAddress: string;
+
+  @Column({ type: 'bigint' })
+  createdAt: number;
+
+  @Column({ type: 'bigint' })
+  updatedAt: number;
 }

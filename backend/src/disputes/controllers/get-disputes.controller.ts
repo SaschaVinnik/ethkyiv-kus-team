@@ -10,7 +10,7 @@ export class GetDisputesController {
     @InjectRepository(DisputeModel)
     private readonly disputeRepository: Repository<DisputeModel>,
   ) {}
-  @Get()
+  @Get(':address')
   getDisputes(@Param('address') address: string) {
     return this.disputeRepository.find({
       where: [
