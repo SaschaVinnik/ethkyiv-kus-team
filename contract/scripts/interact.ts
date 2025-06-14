@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import * as dotenv from "dotenv";
+import { IERC20 } from "../typechain-types"; // або ./typechain
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ async function main() {
   const mediator = new ethers.Wallet(process.env.MEDIATOR_PRIVATE_KEY!, provider);
 
   const contract = await ethers.getContractAt("DisputeResolutionV2", CONTRACT_ADDRESS, party1);
-  const usdc = await ethers.getContractAt("IERC20", USDC_ADDRESS, party1);
+  const usdc = await ethers.getContractAt("IERC20", USDC_ADDRESS, party1) as IERC20
 
   // 1. Create dispute
   const tx = await contract.connect(party1).createDispute(party2.address, "ipfs://QmSepoliaTest1");
@@ -33,8 +34,8 @@ async function main() {
   await (await usdc.connect(party1).approve(CONTRACT_ADDRESS, DEPOSIT_AMOUNT)).wait();
   await (await usdc.connect(party2).approve(CONTRACT_ADDRESS, DEPOSIT_AMOUNT)).wait();
 
-  await (await contract.connect(party1).deposit(disputeId)).wait();
-  await (await contract.connect(party2).deposit(disputeId)).wait();
+  await (await contract.connect(party1).deposit(disputeId, 1)).wait();
+  await (await contract.connect(party2).deposit(disputeId, 1)).wait();
 
   const disputeBefore = await contract.getDispute(disputeId);
   console.log("🔒 Dispute state before mediator:", disputeBefore[5]);

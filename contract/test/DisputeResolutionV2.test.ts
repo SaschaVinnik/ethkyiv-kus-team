@@ -11,7 +11,7 @@ describe("DisputeResolutionV2", function () {
   beforeEach(async () => {
     [owner, party1, party2, mediator] = await ethers.getSigners();
     const ContractFactory = await ethers.getContractFactory("DisputeResolutionV2");
-    contract = await ContractFactory.deploy();
+    contract = await ContractFactory.deploy("0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238");
     await contract.waitForDeployment();
   });
 
