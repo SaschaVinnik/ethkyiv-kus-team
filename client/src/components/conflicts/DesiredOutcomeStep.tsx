@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { RadioGroup, Radio, Input, Textarea } from "@heroui/react";
 
 interface DesiredOutcomeData {
@@ -11,7 +11,10 @@ interface DesiredOutcomeStepProps {
   updateData: (data: { desiredOutcome: DesiredOutcomeData }) => void;
 }
 
-export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, updateData }) => {
+export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({
+  data,
+  updateData,
+}) => {
   const [outcomeType, setOutcomeType] = React.useState(data.type);
   const [details, setDetails] = React.useState(data.details);
 
@@ -21,9 +24,11 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-[#a98d5d]">Step 2: Desired Outcome</h2>
+      <h2 className="text-xl font-semibold text-[#a98d5d]">
+        Step 2: Desired Outcome
+      </h2>
       <p className="text-[#a98d5d]">Choose what resolution you seek.</p>
-      
+
       <RadioGroup
         label="Desired Outcome Type"
         value={outcomeType}
@@ -38,17 +43,15 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
             key={type}
             value={type}
             className={`${
-              outcomeType === type
-                ? "border-2 border-[#a98d5d] bg-[#eae6dd] font-semibold"
-                : "border border-[#ddd3c4]"
+              outcomeType === type ? "bg-[#eae6dd] font-semibold" : ""
             } rounded-xl p-3 transition-all duration-200`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </Radio>
         ))}
       </RadioGroup>
-      
-      {outcomeType === 'monetary' && (
+
+      {outcomeType === "monetary" && (
         <Input
           type="number"
           label="Compensation Amount (USD)"
@@ -62,12 +65,14 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
           }
           classNames={{
             label: "text-[#a98d5d]",
-            input: "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
+            input: "bg-white focus:ring-[#a98d5d]",
           }}
         />
       )}
-      
-      {(outcomeType === 'action' || outcomeType === 'other' || outcomeType === 'apology') && (
+
+      {(outcomeType === "action" ||
+        outcomeType === "other" ||
+        outcomeType === "apology") && (
         <Textarea
           label="Describe Desired Action"
           placeholder="e.g., refund shipping fees, fix defect..."
@@ -76,13 +81,15 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
           minRows={3}
           classNames={{
             label: "text-[#a98d5d]",
-            input: "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
+            input:
+              "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
           }}
         />
       )}
-      
+
       <p className="text-sm text-[#a98d5d]">
-        If selecting Monetary Compensation, specify the amount. For other outcomes, provide clear details.
+        If selecting Monetary Compensation, specify the amount. For other
+        outcomes, provide clear details.
       </p>
     </div>
   );
