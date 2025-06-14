@@ -13,6 +13,12 @@ export class CreateDisputeController {
   ) {}
   @Post()
   createDispute(@Body() createDisputeBody: CreateDisputeBody) {
-    return '';
+    return this.disputeRepository.save({
+      address1: createDisputeBody.address1,
+      address2: createDisputeBody.address2,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      mediatorAddress: createDisputeBody.mediatorAddress,
+    });
   }
 }

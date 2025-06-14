@@ -23,6 +23,6 @@ export class UserModel {
   @Column({ type: 'varchar', length: 255 })
   portfolioUri: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'bigint' })
   createdAt: number;
 }
