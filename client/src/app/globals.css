@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --color-bg:        #0e0e10;      /* Глубокий чёрный */
   --color-bg-soft:   #1a1a1f;      /* Мягкий фон */
