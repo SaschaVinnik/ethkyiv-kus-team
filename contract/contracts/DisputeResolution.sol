@@ -84,8 +84,7 @@ contract DisputeResolutionV2 {
 
         disputePartiesView[id] = [msg.sender, _otherParty];
 
-        emit DisputeCreated(id, msg.sender, _otherParty, _problemIPFS);
-        emit DisputeUpdated(id);
+        emit DisputeCreated(id, msg.sender, _otherParty, _problemIPFS);       
         return id;
     }
 
