@@ -1,0 +1,76 @@
+.pageWrapper {
+  position: relative; /* Чтобы внутри можно было позиционировать фоновые элементы */
+  width: 100vw;
+  height: 100vh;
+  background: #f5f4f1; /* можно заменить на прозрачный или градиент */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.profileContainer {
+  position: relative;
+  z-index: 10; /* Чтобы контент был поверх фона */
+  max-width: 600px;
+  width: 90%;
+  background: #ffffff;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  overflow-y: auto; /* если будет много контента, добавить прокрутку */
+  max-height: 90vh; /* чтобы контейнер не выходил за экран */
+}
+
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.infoBlock {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.infoBlock strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #a98d5d;
+}
+
+.infoBlock p {
+  margin: 0;
+}
+
+.primaryButton {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  background-color: #a98d5d;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(169, 141, 93, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+}
+
+.primaryButton:hover {
+  background-color: #8a7648;
+  box-shadow: 0 0 20px rgba(169, 141, 93, 0.7);
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.5rem;
+  color: #888;
+}

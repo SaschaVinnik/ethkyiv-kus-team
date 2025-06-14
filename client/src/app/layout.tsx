@@ -15,6 +15,9 @@ import { mainnet, sepolia } from 'wagmi/chains';
 // Google Fonts — Inter и DM Sans
 import { Inter, DM_Sans } from 'next/font/google';
 
+// Импортируем Header
+import Header from '@/components/Header/Header';
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -42,7 +45,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="font-sans">
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider>{children}</RainbowKitProvider>
+            <RainbowKitProvider>
+              <Header />
+              <main style={{ paddingTop: '60px' }}>
+                {children}
+              </main>
+            </RainbowKitProvider>
           </QueryClientProvider>
         </WagmiProvider>
       </body>
