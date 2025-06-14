@@ -13,6 +13,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+  adminer:
+    image: adminer
+    container_name: ethkyiv_adminer
+    ports:
+      - 81:8080
+    restart: unless-stopped
 
 volumes:
   postgres_data:
