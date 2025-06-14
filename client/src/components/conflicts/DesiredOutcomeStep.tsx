@@ -21,18 +21,31 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800">Step 2: Desired Outcome</h2>
-      <p className="text-gray-600">Choose what resolution you seek.</p>
+      <h2 className="text-xl font-semibold text-[#a98d5d]">Step 2: Desired Outcome</h2>
+      <p className="text-[#a98d5d]">Choose what resolution you seek.</p>
       
       <RadioGroup
         label="Desired Outcome Type"
         value={outcomeType}
         onValueChange={setOutcomeType}
+        classNames={{
+          label: "text-[#a98d5d]",
+          wrapper: "bg-[#ece9e1] p-4 rounded-2xl",
+        }}
       >
-        <Radio value="monetary">Monetary Compensation</Radio>
-        <Radio value="apology">Apology or Statement</Radio>
-        <Radio value="action">Specific Action</Radio>
-        <Radio value="other">Other</Radio>
+        {["monetary", "apology", "action", "other"].map((type) => (
+          <Radio
+            key={type}
+            value={type}
+            className={`${
+              outcomeType === type
+                ? "border-2 border-[#a98d5d] bg-[#eae6dd] font-semibold"
+                : "border border-[#ddd3c4]"
+            } rounded-xl p-3 transition-all duration-200`}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </Radio>
+        ))}
       </RadioGroup>
       
       {outcomeType === 'monetary' && (
@@ -44,9 +57,13 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
           onValueChange={setDetails}
           startContent={
             <div className="pointer-events-none flex items-center">
-              <span className="text-default-400 text-small">$</span>
+              <span className="text-[#a98d5d] text-small">$</span>
             </div>
           }
+          classNames={{
+            label: "text-[#a98d5d]",
+            input: "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
+          }}
         />
       )}
       
@@ -57,10 +74,14 @@ export const DesiredOutcomeStep: React.FC<DesiredOutcomeStepProps> = ({ data, up
           value={details}
           onValueChange={setDetails}
           minRows={3}
+          classNames={{
+            label: "text-[#a98d5d]",
+            input: "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
+          }}
         />
       )}
       
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[#a98d5d]">
         If selecting Monetary Compensation, specify the amount. For other outcomes, provide clear details.
       </p>
     </div>

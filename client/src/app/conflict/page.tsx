@@ -41,9 +41,9 @@ export default function App() {
     console.log('Saving draft:', formData);
   };
 
-  const updateFormData = (stepData: Partial<typeof formData>) => {
-    setFormData({ ...formData, ...stepData });
-  };
+  const updateFormData = React.useCallback((stepData: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...stepData }));
+  }, []);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -61,22 +61,23 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white p-4 md:p-8">
-      <Card className="max-w-4xl mx-auto">
-        <CardHeader className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold text-gray-800">Submit a Dispute</h1>
+    <div className="min-h-screen bg-[#f0eee8] p-4 md:p-8">
+      <Card className="max-w-4xl mx-auto shadow-lg rounded-2xl overflow-hidden">
+        <CardHeader className="flex flex-col gap-2 bg-[#eae6dd]">
+          <h1 className="text-2xl font-bold text-[#a98d5d]">Submit a Dispute</h1>
           <Progress
             aria-label="Dispute submission progress"
             value={(currentStep + 1) * 20}
             className="max-w-md"
+            color="warning"
           />
-          <p className="text-gray-600">Step {currentStep + 1} of {steps.length}: {steps[currentStep]}</p>
+          <p className="text-[#a98d5d]">Step {currentStep + 1} of {steps.length}: {steps[currentStep]}</p>
         </CardHeader>
-        <CardBody>
+        <CardBody className="bg-white">
           {renderStep()}
           <div className="flex justify-between mt-6">
             <Button
-              color="default"
+              color="warning"
               variant="flat"
               onPress={handleBack}
               isDisabled={currentStep === 0}
@@ -85,11 +86,11 @@ export default function App() {
               Back
             </Button>
             <div className="flex gap-2">
-              <Button color="default" variant="flat" onPress={handleSaveDraft}>
+              <Button color="warning" variant="flat" onPress={handleSaveDraft}>
                 <Icon icon="lucide:save" className="mr-2" />
                 Save Draft
               </Button>
-              <Button color="primary" onPress={handleNext} isDisabled={currentStep === steps.length - 1}>
+              <Button color="warning" onPress={handleNext} isDisabled={currentStep === steps.length - 1}>
                 {currentStep < steps.length - 1 ? (
                   <>
                     Next: {steps[currentStep + 1]}
