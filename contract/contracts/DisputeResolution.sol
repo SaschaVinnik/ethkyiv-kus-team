@@ -27,6 +27,8 @@ contract DisputeResolutionV2 {
     event MediatorSet(uint256 indexed id, address mediator);
     event DisputeResolved(uint256 indexed id, string resolutionIPFS);
     event DisputeCancelled(uint256 indexed id);
+    event DisputeUpdated(uint256 indexed id);
+
 
     modifier onlyParty(uint256 id) {
         require(
@@ -57,6 +59,7 @@ contract DisputeResolutionV2 {
         disputePartiesView[id] = [msg.sender, _otherParty];
 
         emit DisputeCreated(id, msg.sender, _otherParty, _problemIPFS);
+        emit DisputeUpdated(id);
         return id;
     }
 
@@ -73,6 +76,7 @@ contract DisputeResolutionV2 {
         d.totalLockedAmount += amount;
 
         emit DepositMade(id, msg.sender, amount);
+        emit DisputeUpdated(id);
 
         if (d.hasPaid[d.parties[0]] && d.hasPaid[d.parties[1]]) {
             d.status = DisputeStatus.AwaitingMediatorApproval;
@@ -90,10 +94,12 @@ contract DisputeResolutionV2 {
         d.mediatorConfirmed[msg.sender] = true;
 
         emit MediatorConfirmed(id, msg.sender);
+        emit DisputeUpdated(id);
 
         if (d.mediatorConfirmed[d.parties[0]] && d.mediatorConfirmed[d.parties[1]]) {
             d.status = DisputeStatus.Ready;
             emit MediatorSet(id, _mediator);
+            emit DisputeUpdated(id);
         }
     }
 
@@ -108,6 +114,7 @@ contract DisputeResolutionV2 {
         require(usdcToken.transfer(d.mediator, d.totalLockedAmount), "USDC payout failed");
 
         emit DisputeResolved(id, _resolutionIPFS);
+        emit DisputeUpdated(id);
     }
 
     function cancelDispute(uint256 id) external onlyParty(id) {
@@ -129,6 +136,7 @@ contract DisputeResolutionV2 {
 
         d.status = DisputeStatus.Cancelled;
         emit DisputeCancelled(id);
+        emit DisputeUpdated(id);
     }
 
     function getDispute(uint256 id) external view returns (

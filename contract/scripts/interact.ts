@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const CONTRACT_ADDRESS = "0x06b31C4369A7EB40e736df8096AE4aC9f06D45D8";
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS!;
 const USDC_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
 const USDC_DECIMALS = 6;
 const DEPOSIT_AMOUNT = 1_000_000; // 1 USDC with 6 decimals
