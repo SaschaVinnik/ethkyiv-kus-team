@@ -17,7 +17,7 @@ contract DisputeResolutionV2 {
 
     uint256 public disputeCount;
     mapping(uint256 => Dispute) private disputes;
-    mapping(uint256 => address[]) public disputePartiesView; // для фронту
+    mapping(uint256 => address[]) public disputePartiesView; 
 
     event DisputeCreated(uint256 indexed id, address party1, address party2, string ipfsHash);
     event DepositMade(uint256 indexed id, address indexed from, uint256 amount);
