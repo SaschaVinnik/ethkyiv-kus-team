@@ -48,8 +48,10 @@
 /* Лейблы с тенью и плавным появлением */
 .label {
   display: block;
+  margin-top: 0.6em;
   margin-bottom: 0.6rem;
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 14px;
   color: #6e5d3b;
   text-shadow: 0 0 3px rgba(0,0,0,0.05);
   transition: color 0.3s ease;
@@ -98,7 +100,6 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 .formGroup {
@@ -154,11 +155,76 @@ button {
   box-shadow: 0 10px 20px rgba(169, 141, 93, 0.5);
 }
 
-/* Добавим плавный курсор для формы */
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.avatarImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #a98d5d;
+  transition: transform 0.2s ease;
+}
+
+.avatarImage:hover {
+  transform: scale(1.05);
+}
+
+.avatarPlaceholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #eee;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 2px dashed #ccc;
+}
+
+.fileInput {
+  display: none;
+}
+
+
 .form :focus-visible {
   outline: 3px solid #a98d5d;
   outline-offset: 3px;
 }
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.registerButton {
+  width: 40%;
+  padding: 0px 14px;
+  font-size: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background: #a98d5d;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(169, 141, 93, 0.4);
+}
+
+.registerButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(169, 141, 93, 0.6);
+}
+
 
 /* Адаптив */
 @media (max-width: 600px) {

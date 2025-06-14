@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi'; // Для получения адреса кошелька
+import { useAccount } from 'wagmi';
 import styles from './page.module.css';
 
 type Role = 'conflict' | 'mediator';
@@ -13,26 +13,25 @@ type UserData = {
   experience?: string;
   portfolio?: string;
   conflictDescription?: string;
+  avatarUrl?: string;
 };
 
 export default function ProfilePage() {
-  // Для примера — храним роль и данные локально
   const [userData, setUserData] = useState<UserData | null>(null);
   const { address } = useAccount();
 
-  // В реальном проекте ты будешь брать эти данные из API или контекста
   useEffect(() => {
-    // Пример: загружаем данные пользователя (здесь хардкод)
-    // Можно менять роль здесь для теста
+    // Пример для медиатора
     const exampleUser: UserData = {
       role: 'mediator',
       name: 'Jane Smith',
       email: 'jane.smith@example.com',
       experience: '5 years in conflict resolution and law.',
       portfolio: 'https://linkedin.com/in/janesmith',
+      avatarUrl: 'https://i.pravatar.cc/150?img=32', // пример аватара
     };
 
-    // или пример для конфликта:
+    // Пример для конфликта (раскомментировать, чтобы протестировать)
     /*
     const exampleUser: UserData = {
       role: 'conflict',
@@ -52,6 +51,16 @@ export default function ProfilePage() {
     <div className={styles.pageWrapper}>
       <div className={styles.profileContainer}>
         <h1 className={styles.title}>User Profile</h1>
+
+        {userData.role === 'mediator' && userData.avatarUrl && (
+          <div className={styles.avatarWrapper}>
+            <img
+              src={userData.avatarUrl}
+              alt={`${userData.name}'s avatar`}
+              className={styles.avatarImage}
+            />
+          </div>
+        )}
 
         <div className={styles.infoBlock}>
           <strong>Name:</strong> {userData.name}

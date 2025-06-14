@@ -11,6 +11,8 @@ import {
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { mainnet, sepolia } from 'wagmi/chains';
+import { lightTheme } from '@rainbow-me/rainbowkit';
+
 
 // Google Fonts — Inter и DM Sans
 import { Inter, DM_Sans } from 'next/font/google';
@@ -45,7 +47,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="font-sans">
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider>
+            <RainbowKitProvider 
+              theme={lightTheme({
+                accentColor: '#a98d5d',        // твой желаемый цвет кнопки
+                accentColorForeground: '#fff', // цвет текста на кнопке
+                borderRadius: 'large',         // или 'small' | 'medium'
+                fontStack: 'system',           // или 'rounded', 'mono'
+              })}>
               <Header />
               <main style={{ paddingTop: '60px' }}>
                 {children}

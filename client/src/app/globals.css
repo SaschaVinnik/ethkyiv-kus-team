@@ -17,7 +17,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-bg);
+  background: #f5f4f1; /* можно заменить на прозрачный или градиент */;
   color: var(--color-text);
   font-family: var(--font--inter);
 }
