@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+interface IERC20 {
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+}
+
 contract DisputeResolutionV2 {
     enum DisputeStatus { PendingFunding, AwaitingMediatorApproval, Ready, Resolved, Cancelled }
 
@@ -9,15 +14,16 @@ contract DisputeResolutionV2 {
         mapping(address => bool) hasPaid;
         mapping(address => bool) mediatorConfirmed;
         uint256 totalLockedAmount;
-        address payable mediator;
+        address mediator;
         string problemIPFS;
         string resolutionIPFS;
         DisputeStatus status;
     }
 
+    IERC20 public usdcToken;
     uint256 public disputeCount;
     mapping(uint256 => Dispute) private disputes;
-    mapping(uint256 => address[]) public disputePartiesView; 
+    mapping(uint256 => address[]) public disputePartiesView;
 
     event DisputeCreated(uint256 indexed id, address party1, address party2, string ipfsHash);
     event DepositMade(uint256 indexed id, address indexed from, uint256 amount);
@@ -32,6 +38,15 @@ contract DisputeResolutionV2 {
             "Not a party"
         );
         _;
+    }
+
+    modifier onlyMediator(uint256 id) {
+        require(msg.sender == disputes[id].mediator, "Only mediator can call this");
+        _;
+    }
+
+    constructor(address _usdcToken) {
+        usdcToken = IERC20(_usdcToken);
     }
 
     function createDispute(address _otherParty, string calldata _problemIPFS) external returns (uint256) {
@@ -50,23 +65,26 @@ contract DisputeResolutionV2 {
         return id;
     }
 
-    function deposit(uint256 id) external payable onlyParty(id) {
+    function deposit(uint256 id, uint256 amount) external onlyParty(id) {
         Dispute storage d = disputes[id];
         require(d.status == DisputeStatus.PendingFunding, "Funding closed");
         require(!d.hasPaid[msg.sender], "Already paid");
-        require(msg.value > 0, "Must send funds");
+        require(amount > 0, "Must deposit non-zero amount");
+
+        // Transfer USDC from user to contract
+        require(usdcToken.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
         d.hasPaid[msg.sender] = true;
-        d.totalLockedAmount += msg.value;
+        d.totalLockedAmount += amount;
 
-        emit DepositMade(id, msg.sender, msg.value);
+        emit DepositMade(id, msg.sender, amount);
 
         if (d.hasPaid[d.parties[0]] && d.hasPaid[d.parties[1]]) {
             d.status = DisputeStatus.AwaitingMediatorApproval;
         }
     }
 
-    function confirmMediator(uint256 id, address payable _mediator) external onlyParty(id) {
+    function confirmMediator(uint256 id, address _mediator) external onlyParty(id) {
         Dispute storage d = disputes[id];
         require(d.status == DisputeStatus.AwaitingMediatorApproval, "Not awaiting mediator");
         require(d.mediator == address(0) || d.mediator == _mediator, "Mediator mismatch");
@@ -82,16 +100,15 @@ contract DisputeResolutionV2 {
         }
     }
 
-    function resolveDispute(uint256 id, string calldata _resolutionIPFS) external onlyParty(id) {
+    function resolveDispute(uint256 id, string calldata _resolutionIPFS) external onlyMediator(id) {
         Dispute storage d = disputes[id];
         require(d.status == DisputeStatus.Ready, "Dispute not ready");
-        require(d.mediator != address(0), "Mediator not assigned");
+        require(d.status != DisputeStatus.Resolved, "Already resolved");
 
         d.resolutionIPFS = _resolutionIPFS;
         d.status = DisputeStatus.Resolved;
 
-        (bool sent, ) = d.mediator.call{value: d.totalLockedAmount}("");
-        require(sent, "Payment to mediator failed");
+        require(usdcToken.transfer(d.mediator, d.totalLockedAmount), "USDC payout failed");
 
         emit DisputeResolved(id, _resolutionIPFS);
     }
@@ -103,16 +120,14 @@ contract DisputeResolutionV2 {
             "Cannot cancel now"
         );
 
-        // Якщо інша сторона не внесла оплату
         address other = (msg.sender == d.parties[0]) ? d.parties[1] : d.parties[0];
         require(!d.hasPaid[other], "Other party already paid");
 
-        uint256 refund = 0;
         if (d.hasPaid[msg.sender]) {
-            refund = address(this).balance >= d.totalLockedAmount ? d.totalLockedAmount : address(this).balance;
-            d.totalLockedAmount = 0;
             d.hasPaid[msg.sender] = false;
-            payable(msg.sender).transfer(refund);
+            uint256 refundAmount = d.totalLockedAmount;
+            d.totalLockedAmount = 0;
+            require(usdcToken.transfer(msg.sender, refundAmount), "USDC refund failed");
         }
 
         d.status = DisputeStatus.Cancelled;
@@ -145,6 +160,4 @@ contract DisputeResolutionV2 {
             d.mediatorConfirmed[d.parties[1]]
         );
     }
-
-    receive() external payable {}
 }

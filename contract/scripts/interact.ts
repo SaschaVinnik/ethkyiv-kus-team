@@ -1,9 +1,12 @@
 import { ethers } from "hardhat";
 import * as dotenv from "dotenv";
 
-const CONTRACT_ADDRESS = "0xa946b8EFFD3a4ED17205EcDAAF989A5423f7f3aE";
-
 dotenv.config();
+
+const CONTRACT_ADDRESS = "0x06b31C4369A7EB40e736df8096AE4aC9f06D45D8";
+const USDC_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+const USDC_DECIMALS = 6;
+const DEPOSIT_AMOUNT = 1_000_000; // 1 USDC with 6 decimals
 
 async function main() {
   const provider = new ethers.JsonRpcProvider(`https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`);
@@ -12,47 +15,51 @@ async function main() {
   const party2 = new ethers.Wallet(process.env.PARTY2_PRIVATE_KEY!, provider);
   const mediator = new ethers.Wallet(process.env.MEDIATOR_PRIVATE_KEY!, provider);
 
-  const contract = await ethers.getContractAt(
-    "DisputeResolutionV2",
-    CONTRACT_ADDRESS!,
-    party1 // default signer
-  );
+  const contract = await ethers.getContractAt("DisputeResolutionV2", CONTRACT_ADDRESS, party1);
+  const usdc = await ethers.getContractAt("IERC20", USDC_ADDRESS, party1);
 
-  // 1. Creating a dispute
+  // 1. Create dispute
   const tx = await contract.connect(party1).createDispute(party2.address, "ipfs://QmSepoliaTest1");
   const receipt = await tx.wait();
   const iface = new ethers.Interface([
     "event DisputeCreated(uint256 indexed id, address party1, address party2, string ipfsHash)"
   ]);
-
   const log = receipt?.logs?.find(log => log.address.toLowerCase() === String(contract.target).toLowerCase());
   const parsedLog = iface.parseLog(log!);
   const disputeId = parsedLog!.args[0];
+  console.log("🆕 Created dispute ID:", disputeId.toString());
 
-  console.log("Created dispute ID:", disputeId.toString());
+  // 2. Approve and Deposit
+  await (await usdc.connect(party1).approve(CONTRACT_ADDRESS, DEPOSIT_AMOUNT)).wait();
+  await (await usdc.connect(party2).approve(CONTRACT_ADDRESS, DEPOSIT_AMOUNT)).wait();
 
-  // 2. Deposit
-  await (await contract.connect(party1).deposit(disputeId, { value: ethers.parseEther("0.001") })).wait();
-  await (await contract.connect(party2).deposit(disputeId, { value: ethers.parseEther("0.001") })).wait();
+  await (await contract.connect(party1).deposit(disputeId)).wait();
+  await (await contract.connect(party2).deposit(disputeId)).wait();
 
-  const dispute = await contract.getDispute(disputeId);
-  console.log("🧾 Dispute state before confirm:", dispute);
+  const disputeBefore = await contract.getDispute(disputeId);
+  console.log("🔒 Dispute state before mediator:", disputeBefore[5]);
 
-  // 3. Confirmation of the mediator
+  // 3. Confirm mediator
   await (await contract.connect(party1).confirmMediator(disputeId, mediator.address)).wait();
   await (await contract.connect(party2).confirmMediator(disputeId, mediator.address)).wait();
 
-  const updated = await contract.getDispute(disputeId);
-  console.log("✅ Updated state:", updated[5]); // 2 (Ready)
+  const disputeReady = await contract.getDispute(disputeId);
+  console.log("🧑‍⚖️ Mediator confirmed. Status:", disputeReady[5]); // Ready = 2
 
+  // Optional: check balance of mediator before
+  const balanceBefore = await usdc.balanceOf(mediator.address);
+  console.log("💰 Mediator USDC before:", balanceBefore.toString());
 
-  // 4. Confirmation of the mediatoravilization of the dispute
-  await (await contract.connect(party1).resolveDispute(disputeId, "ipfs://QmSepoliaResolution")).wait();
+  // 4. Resolve dispute — by mediator
+  await (await contract.connect(mediator).resolveDispute(disputeId, "ipfs://QmSepoliaResolution")).wait();
+  console.log("✅ Dispute resolved!");
 
-  console.log("✅ Resolved on-chain!");
+  // Optional: check balance after
+  const balanceAfter = await usdc.balanceOf(mediator.address);
+  console.log("💰 Mediator USDC after:", balanceAfter.toString());
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error("❌", error);
   process.exit(1);
 });
