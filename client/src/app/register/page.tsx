@@ -1,28 +1,31 @@
-'use client';
+"use client";
 
-import styles from './page.module.css';
-import { useState, useRef, ChangeEvent } from 'react';
-import WalletConnectButton from '@/components/WalletConnectButton/WalletConnectButton';
-import { useAccount } from 'wagmi';
+import styles from "./page.module.css";
+import { useState, useRef, ChangeEvent } from "react";
+import WalletConnectButton from "@/components/WalletConnectButton/WalletConnectButton";
+import { useAccount } from "wagmi";
+import { createUser } from "../services/verdicto.api.service";
 
 interface RegisterPageProps {
-  initialRole: 'conflict' | 'mediator';
+  initialRole: "conflict" | "mediator";
 }
 
 export default function RegisterPage({ initialRole }: RegisterPageProps) {
-  const [role] = useState<'conflict' | 'mediator'>('mediator');
+  const [role] = useState<"conflict" | "mediator">("mediator");
   const [avatar, setAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { address } = useAccount();
 
   const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    experience: '',
-    portfolio: '',
+    name: "",
+    email: "",
+    experience: "",
+    portfolio: "",
   });
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormState((prev) => ({
       ...prev,
       [e.target.id]: e.target.value,
@@ -31,7 +34,7 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatar(reader.result as string);
@@ -44,14 +47,16 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
     fileInputRef.current?.click();
   };
 
-  const uploadAvatarToImgBB = async (base64Image: string): Promise<string | null> => {
+  const uploadAvatarToImgBB = async (
+    base64Image: string
+  ): Promise<string | null> => {
     const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY; // замени на свой
     const formData = new FormData();
-    formData.append('image', base64Image.split(',')[1]);
+    formData.append("image", base64Image.split(",")[1]);
 
     try {
       const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
 
@@ -59,11 +64,11 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
       if (data.success) {
         return data.data.url;
       } else {
-        console.error('Upload failed:', data);
+        console.error("Upload failed:", data);
         return null;
       }
     } catch (err) {
-      console.error('Error uploading avatar:', err);
+      console.error("Error uploading avatar:", err);
       return null;
     }
   };
@@ -72,31 +77,31 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
     e.preventDefault();
 
     if (!address) {
-      alert('Please connect your wallet.');
+      alert("Please connect your wallet.");
       return;
     }
 
     const { name, email, experience, portfolio } = formState;
 
-    if (role === 'conflict') {
+    if (role === "conflict") {
       if (!name) {
-        alert('Please enter your name.');
+        alert("Please enter your name.");
         return;
       }
 
       const data = {
-        role: 'conflict',
+        role: "conflict",
         name,
         wallet: address,
       };
 
-      console.log('Submitting conflict registration:', data);
+      console.log("Submitting conflict registration:", data);
       // TODO: отправь это в Supabase / API
     }
 
-    if (role === 'mediator') {
+    if (role === "mediator") {
       if (!name || !email || !experience) {
-        alert('Please fill in all required fields.');
+        alert("Please fill in all required fields.");
         return;
       }
 
@@ -104,13 +109,13 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
       if (avatar) {
         avatarUrl = await uploadAvatarToImgBB(avatar);
         if (!avatarUrl) {
-          alert('Failed to upload avatar. Please try again.');
+          alert("Failed to upload avatar. Please try again.");
           return;
         }
       }
 
       const data = {
-        role: 'mediator',
+        role: "mediator",
         name,
         email,
         experience,
@@ -119,8 +124,16 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
         avatar: avatarUrl,
       };
 
-      console.log('Submitting mediator registration:', data);
-      // TODO: отправь это в Supabase / API
+      console.log("Submitting mediator registration:", data);
+      await createUser({
+        address: address,
+        photoUri: avatarUrl ?? "",
+        bio: experience,
+        portfolioUri: portfolio ?? "",
+        isMediator: true,
+        name,
+        email,
+      });
     }
   };
 
@@ -144,7 +157,7 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
   return (
     <div className={styles.container}>
       <div className={styles.overlay}>
-        {role === 'conflict' && (
+        {role === "conflict" && (
           <form className={styles.form} onSubmit={handleRegister}>
             <h2 className={styles.title}>Conflict Registration</h2>
 
@@ -158,7 +171,9 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="name" className={styles.label}>Your Name</label>
+              <label htmlFor="name" className={styles.label}>
+                Your Name
+              </label>
             </div>
 
             <div className={styles.buttonWrapper}>
@@ -170,7 +185,7 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
           </form>
         )}
 
-        {role === 'mediator' && (
+        {role === "mediator" && (
           <form className={styles.form} onSubmit={handleRegister}>
             <h2 className={styles.title}>Mediator Application</h2>
 
@@ -186,7 +201,9 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="name" className={styles.label}>Full Name</label>
+              <label htmlFor="name" className={styles.label}>
+                Full Name
+              </label>
             </div>
 
             <div className={styles.formGroup}>
@@ -199,7 +216,9 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="email" className={styles.label}>Email</label>
+              <label htmlFor="email" className={styles.label}>
+                Email
+              </label>
             </div>
 
             <div className={styles.formGroup}>
@@ -212,7 +231,9 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
                 onChange={handleInputChange}
                 required
               />
-              <label htmlFor="experience" className={styles.label}>Experience Summary</label>
+              <label htmlFor="experience" className={styles.label}>
+                Experience Summary
+              </label>
             </div>
 
             <div className={styles.formGroup}>
@@ -224,7 +245,9 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
                 value={formState.portfolio}
                 onChange={handleInputChange}
               />
-              <label htmlFor="portfolio" className={styles.label}>Portfolio / LinkedIn</label>
+              <label htmlFor="portfolio" className={styles.label}>
+                Portfolio / LinkedIn
+              </label>
             </div>
 
             <div className={styles.buttonWrapper}>
