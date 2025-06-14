@@ -47,7 +47,6 @@ contract DisputeResolutionV2 {
 
     function createDispute(address _otherParty, string calldata _problemIPFS) external returns (uint256) {
         require(msg.sender != _otherParty, "Cannot dispute with yourself");
-
         uint256 id = disputeCount++;
         Dispute storage d = disputes[id];
         d.parties[0] = msg.sender;
@@ -84,6 +83,8 @@ contract DisputeResolutionV2 {
         Dispute storage d = disputes[id];
         require(d.status == DisputeStatus.AwaitingMediatorApproval, "Not awaiting mediator");
         require(d.mediator == address(0) || d.mediator == _mediator, "Mediator mismatch");
+        require(_mediator != d.parties[0] && _mediator != d.parties[1], "Mediator cannot be a party member");
+        
 
         d.mediator = _mediator;
         d.mediatorConfirmed[msg.sender] = true;
