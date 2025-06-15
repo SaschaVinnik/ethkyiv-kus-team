@@ -16,7 +16,7 @@ export default function Header() {
           <ul className={styles.navList}>
             <li><Link href="/" className={styles.navLink}>Home</Link></li>
             <li><Link href="/conflict" className={styles.navLink}>Dispute</Link></li>
-            <li><Link href="/conflicts" className={styles.navLink}>All Disputes</Link></li>
+            <li><Link href="/conflicts" className={styles.navLink}>My Disputes</Link></li>
             <li><Link href="/profile" className={styles.navLink}>Profile</Link></li>
           </ul>
         </nav>

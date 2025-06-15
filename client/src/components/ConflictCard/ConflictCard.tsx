@@ -64,7 +64,7 @@ export default function ConflictCard({
     setSuccessPay(false);
     try {
       const disputeIdNum = parseInt(conflictId, 10);
-      const amountToPay = 1; // Здесь укажи сумму для оплаты
+      const amountToPay = 1000000; // Здесь укажи сумму для оплаты
 
       await depositFunds(disputeIdNum, amountToPay);
       setSuccessPay(true);
