@@ -7,6 +7,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { ShieldCheck, Users, Scale, Cpu, Lock, CheckCircle, DatabaseZap, KeyRound } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function HomePage() {
   useEffect(() => {
@@ -27,8 +28,8 @@ export default function HomePage() {
             Resolve corporate conflicts transparently with blockchain and trusted mediators.
           </p>
           <div className={styles.buttons}>
-            <button className={styles.primary}>I have a conflict</button>
-            <button className={styles.secondary}>I want to help</button>
+            <Link href={'/register?role=conflict'} className={styles.primary}>I have a conflict</Link>
+            <Link href={'/register?role=mediator'} className={styles.secondary}>I want to help</Link>
           </div>
         </div>
       </section>

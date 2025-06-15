@@ -15,9 +15,9 @@ export default function Header() {
         <nav className={`${styles.nav} ${menuOpen ? styles.open : ''}`}>
           <ul className={styles.navList}>
             <li><Link href="/" className={styles.navLink}>Home</Link></li>
-            <li><Link href="/About" className={styles.navLink}>About</Link></li>
-            <li><Link href="/Services" className={styles.navLink}>Services</Link></li>
-            <li><Link href="/Contacts" className={styles.navLink}>Contact</Link></li>
+            <li><Link href="/conflict" className={styles.navLink}>Dispute</Link></li>
+            <li><Link href="/conflicts" className={styles.navLink}>All Disputes</Link></li>
+            <li><Link href="/profile" className={styles.navLink}>Profile</Link></li>
           </ul>
         </nav>
 

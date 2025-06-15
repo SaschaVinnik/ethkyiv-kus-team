@@ -5,12 +5,15 @@ import { useState, useRef, ChangeEvent } from "react";
 import WalletConnectButton from "@/components/WalletConnectButton/WalletConnectButton";
 import { useAccount } from "wagmi";
 import { createUser } from "../services/verdicto.api.service";
+import { useSearchParams } from "next/navigation";
 
 interface RegisterPageProps {
   initialRole: "conflict" | "mediator";
 }
 
 export default function RegisterPage({ initialRole }: RegisterPageProps) {
+  const searchParams = useSearchParams();
+  const roleFromQuery = searchParams.get("role");
   const [role] = useState<"conflict" | "mediator">("mediator");
   const [avatar, setAvatar] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -157,7 +160,7 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
   return (
     <div className={styles.container}>
       <div className={styles.overlay}>
-        {role === "conflict" && (
+        {roleFromQuery === "conflict" && (
           <form className={styles.form} onSubmit={handleRegister}>
             <h2 className={styles.title}>Conflict Registration</h2>
 
@@ -185,7 +188,7 @@ export default function RegisterPage({ initialRole }: RegisterPageProps) {
           </form>
         )}
 
-        {role === "mediator" && (
+        {roleFromQuery === "mediator" && (
           <form className={styles.form} onSubmit={handleRegister}>
             <h2 className={styles.title}>Mediator Application</h2>
 

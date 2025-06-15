@@ -15,6 +15,7 @@ import { Inter, DM_Sans } from "next/font/google";
 
 // Импортируем Header
 import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             >
               <Header />
               <main style={{ paddingTop: "60px" }}>{children}</main>
+              <Footer />
             </RainbowKitProvider>
           </QueryClientProvider>
         </WagmiProvider>
