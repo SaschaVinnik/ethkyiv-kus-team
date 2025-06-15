@@ -17,4 +17,9 @@ export const createUser = async (user: {
   return response.data;
 };
 
+export const getDisputes = async (walletAddress: string) => {
+  const response = await api.get(`/disputes/${walletAddress}`)
+  return response.data
+}
+
 export default api;

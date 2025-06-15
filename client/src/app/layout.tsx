@@ -7,7 +7,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { lightTheme } from "@rainbow-me/rainbowkit";
 
 // Google Fonts — Inter и DM Sans
@@ -31,7 +31,7 @@ const dmSans = DM_Sans({
 const config = getDefaultConfig({
   appName: "Hackathon App",
   projectId: "my-hackathon-dapp",
-  chains: [mainnet, sepolia],
+  chains: [sepolia],
   ssr: true,
 });
 

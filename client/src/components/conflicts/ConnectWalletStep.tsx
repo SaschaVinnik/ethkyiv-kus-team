@@ -78,7 +78,7 @@ export const ConnectWalletStep: React.FC<ConnectWalletStepProps> = ({
 
       <div>
         <label className="block text-sm font-medium text-[#a98d5d] mb-2">
-          Attachments (optional)
+          Attachments
         </label>
         <div className="flex items-center justify-center w-full">
           <label

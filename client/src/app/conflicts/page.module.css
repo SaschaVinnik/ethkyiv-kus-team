@@ -1,5 +1,6 @@
 .pageWrapper {
   max-width: 720px;
+  min-height: 100vh;
   margin: 2rem auto;
   padding: 0 1rem;
 }
@@ -11,4 +12,16 @@
   color: #1a1a1a;
   margin-bottom: 2rem;
   text-align: center;
+}
+
+.infoText {
+  color: #a98d5d;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.errorText {
+  color: #c0392b;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }

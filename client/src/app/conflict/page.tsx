@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader, Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { ConnectWalletStep } from "@/components/conflicts/ConnectWalletStep";
 import { pinDisputeWithAttachments } from "@/lib/pinata";
+import { createDispute } from "@/lib/contract";
 
 export default function App() {
   const [formData, setFormData] = React.useState({
@@ -18,6 +19,7 @@ export default function App() {
   };
 
   const handleSubmit = async () => {
+    const walletAddress = formData.walletAddress
     try {
       const { metadataUrl, fileUrls } = await pinDisputeWithAttachments(
         {
@@ -26,6 +28,10 @@ export default function App() {
         },
         formData.attachments
       );
+
+      const disputeId = await createDispute(walletAddress, metadataUrl);
+      console.log(disputeId);
+      
       alert(`Uploaded! Metadata: ${metadataUrl}`);
       console.log("📄 Metadata URL:", metadataUrl);
       console.log("📂 Attachments:", fileUrls);
