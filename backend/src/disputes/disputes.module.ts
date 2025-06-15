@@ -4,12 +4,14 @@ import { GetDisputesController } from './controllers/get-disputes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DisputeModel } from './models/dispute.model';
 import { DisputeListener } from './listener/dispute.listener';
+import { GetDisputeByIdController } from './controllers/get-dispute-by-id.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DisputeModel])],  
+  imports: [TypeOrmModule.forFeature([DisputeModel])],
   controllers: [
     GetDisputesController,
-    UpdateDisputeController,    
+    UpdateDisputeController,
+    GetDisputeByIdController,
   ],
   providers: [DisputeListener],
 })
