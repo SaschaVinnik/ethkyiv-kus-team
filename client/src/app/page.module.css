@@ -1,0 +1,175 @@
+.main {
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  background-color: #f5f4f1;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  height: 100vh;
+  background: url('/banner.jpg') no-repeat center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 244, 241, 0.7);
+  backdrop-filter: blur(0px);
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary, .secondary {
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.primary {
+  background: #a98d5d;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(169, 141, 93, 0.4);
+}
+
+.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(169, 141, 93, 0.6);
+}
+
+.secondary {
+  background: transparent;
+  border: 2px solid #a98d5d;
+  color: #a98d5d;
+}
+
+.secondary:hover {
+  background: #a98d5d;
+  color: white;
+}
+
+/* Steps */
+.steps {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #f0eee8;
+}
+
+.stepGrid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.step {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  max-width: 300px;
+  flex: 1;
+  min-width: 240px;
+  transition: transform 0.3s;
+}
+
+.step:hover {
+  transform: translateY(-6px);
+}
+
+.step h3 {
+  margin-top: 1rem;
+}
+
+.arrow {
+  font-size: 2rem;
+  color: #a98d5d;
+}
+
+/* Trust Section */
+.trust {
+  padding: 4rem 2rem;
+  background: #f5f4f1;
+  text-align: center;
+}
+
+.caseGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.case {
+  background: #eae6dd;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 320px;
+  transition: all 0.3s;
+  color: #1a1a1a;
+}
+
+.case:hover {
+  background: #ddd3c4;
+  transform: translateY(-4px);
+}
+
+/* Tech Section */
+.tech {
+  padding: 4rem 2rem;
+  background: #ece9e1;
+  text-align: center;
+}
+
+.techList {
+  list-style: none;
+  padding: 0;
+  max-width: 500px;
+  margin: 2rem auto 0 auto;
+  text-align: left;
+}
+
+.techList li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #d4cbbc;
+  font-size: 1.1rem;
+}
