@@ -1,29 +1,39 @@
 "use client";
 
 import React from "react";
-import { Input, Textarea, Button } from "@heroui/react";
+import { Input, Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { useAccount, useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
 
-interface FactualSummaryData {
-  title: string;
-  summary: string;
-  attachments: File[];
+interface ConnectWalletStepProps {
+  data: {
+    walletAddress: string;
+    counterpartyAddress: string;
+    attachments: File[];
+  };
+  updateData: (data: Partial<ConnectWalletStepProps["data"]>) => void;
 }
 
-interface FactualSummaryStepProps {
-  data: FactualSummaryData;
-  updateData: (data: { factualSummary: FactualSummaryData }) => void;
-}
-
-export const FactualSummaryStep: React.FC<FactualSummaryStepProps> = ({
+export const ConnectWalletStep: React.FC<ConnectWalletStepProps> = ({
   data,
   updateData,
 }) => {
-  const [title, setTitle] = React.useState(data.title);
-  const [summary, setSummary] = React.useState(data.summary);
   const [attachments, setAttachments] = React.useState<File[]>(
     data.attachments
   );
+  const [counterparty, setCounterparty] = React.useState(data.counterpartyAddress);
+
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect();
+
+  React.useEffect(() => {
+    updateData({
+      walletAddress: address || "",
+      counterpartyAddress: counterparty,
+      attachments,
+    });
+  }, [address, counterparty, attachments]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -35,40 +45,30 @@ export const FactualSummaryStep: React.FC<FactualSummaryStepProps> = ({
     setAttachments(attachments.filter((_, i) => i !== index));
   };
 
-  React.useEffect(() => {
-    updateData({ factualSummary: { title, summary, attachments } });
-  }, [title, summary, attachments, updateData]);
-
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-[#a98d5d]">
-        Step 1: Factual Summary
-      </h2>
+      <h2 className="text-xl font-semibold text-[#a98d5d]">Dispute Information</h2>
       <p className="text-[#a98d5d]">
-        Provide a neutral, objective description of the dispute facts without
-        opinions.
+        Connect your wallet and specify the other party involved in the dispute.
       </p>
 
-      <Input
-        label="Dispute Title"
-        placeholder="Short descriptive title"
-        value={title}
-        onValueChange={setTitle}
-        isRequired
-        classNames={{
-          label: "text-[#a98d5d]",
-          input:
-            "bg-white border-[#ddd3c4] focus:border-[#a98d5d] focus:ring-[#a98d5d]",
-        }}
-      />
+      {!isConnected ? (
+        <Button color="warning" onPress={() => injected()}>
+          <Icon icon="lucide:wallet" className="mr-2" />
+          Connect Wallet
+        </Button>
+      ) : (
+        <div className="text-[#a98d5d] font-medium">
+          ✅ Wallet connected: <span className="break-all">{address}</span>
+        </div>
+      )}
 
-      <Textarea
-        label="Fabula (Factual Summary)"
-        placeholder="Describe the key facts neutrally…"
-        value={summary}
-        onValueChange={setSummary}
+      <Input
+        label="Counterparty Wallet Address"
+        placeholder="0x..."
+        value={counterparty}
+        onValueChange={setCounterparty}
         isRequired
-        minRows={4}
         classNames={{
           label: "text-[#a98d5d]",
           input:
