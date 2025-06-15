@@ -53,7 +53,7 @@ export const ConnectWalletStep: React.FC<ConnectWalletStepProps> = ({
       </p>
 
       {!isConnected ? (
-        <Button color="warning" onPress={() => injected()}>
+        <Button color="warning" onPress={() => connect({ connector: injected() })}>
           <Icon icon="lucide:wallet" className="mr-2" />
           Connect Wallet
         </Button>

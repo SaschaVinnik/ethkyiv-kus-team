@@ -19,7 +19,7 @@ export default function App() {
   };
 
   const handleSubmit = async () => {
-    const walletAddress = formData.walletAddress
+    const counterpartyAddress = formData.counterpartyAddress
     try {
       const { metadataUrl, fileUrls } = await pinDisputeWithAttachments(
         {
@@ -29,7 +29,7 @@ export default function App() {
         formData.attachments
       );
 
-      const disputeId = await createDispute(walletAddress, metadataUrl);
+      const disputeId = await createDispute(counterpartyAddress, metadataUrl);
       console.log(disputeId);
       
       alert(`Uploaded! Metadata: ${metadataUrl}`);
